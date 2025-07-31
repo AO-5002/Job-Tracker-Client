@@ -8,7 +8,7 @@ const PostLoginRedirect = () => {
     if (isLoading) return;
 
     if (isAuthenticated && user) {
-      window.location.replace(`/api-page/${user.name}`);
+      window.location.replace(`/dashboard/${user.name}`);
     }
   }, [isAuthenticated, isLoading, user]);
 
