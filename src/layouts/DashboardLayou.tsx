@@ -15,7 +15,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-export default function Page() {
+interface ChildrenProps {
+  children: React.ReactNode;
+}
+
+export default function DashboardLayout({ children }: ChildrenProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
