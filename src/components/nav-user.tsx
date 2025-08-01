@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -26,6 +19,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
+import { useAuth0 } from "@auth0/auth0-react";
+
 export function NavUser({
   user,
 }: {
@@ -36,6 +31,8 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+
+  const { logout } = useAuth0();
 
   return (
     <SidebarMenu>
@@ -75,22 +72,10 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
+                Dark Mode
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
@@ -98,7 +83,11 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                logout({ logoutParams: { returnTo: window.location.origin } })
+              }
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

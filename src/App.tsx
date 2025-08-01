@@ -1,7 +1,7 @@
 import "./App.css";
 import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
 import PostLoginRedirect from "./pages/PostLoginRedirect";
+import Tracker from "./pages/Tracker";
 import { Routes, Route } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/post-login-redirect" element={<PostLoginRedirect />} />
-        <Route path="/dashboard/:id" element={<Dashboard />} />
+        <Route path="/dashboard/tracker/:id" element={<Tracker />} />
       </Routes>
     </QueryClientProvider>
   );
