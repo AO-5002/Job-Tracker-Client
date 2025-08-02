@@ -15,7 +15,7 @@ export default function ApplicationList({ status }: ApplicationStatusType) {
   return (
     <div className="w-full h-full flex flex-col items-center gap-4">
       {applications.map((item) => {
-        return <ApplicationItem {...item} />;
+        return <ApplicationItem key={item.id} {...item} />;
       })}
     </div>
   );

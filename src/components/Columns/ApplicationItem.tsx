@@ -3,7 +3,7 @@ import exampleLogo from "@/images/googleLogo.png";
 import { useEffect, useRef, useState } from "react";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
-import { createRoot } from "react-dom/client";
+
 import { createPortal } from "react-dom";
 
 export default function ApplicationItem(item: Application) {
@@ -20,6 +20,12 @@ export default function ApplicationItem(item: Application) {
 
     return draggable({
       element,
+      getInitialData: () => ({
+        type: "application",
+        applicationData: item,
+        currentStatus: item.status, // Current status for easy access
+        applicationId: item.id, // ID for the API call
+      }),
 
       onDragStart() {
         setIsDragging(() => true);
