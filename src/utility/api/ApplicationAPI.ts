@@ -1,7 +1,9 @@
 import axios from "axios";
 import type { SortField, SortOrder } from "../stores/ApplicationStore";
 import {
+  ApplicationSchema,
   updateApplicationSchema,
+  type Application,
   type ApplicationUpdate,
   type Status,
 } from "../schema/Application";
@@ -32,6 +34,24 @@ async function getApplications(
   }
 }
 
+async function createApplication(token: string, newItem: Application) {
+  try {
+    const resolvedToken = await token;
+    const validItem = ApplicationSchema.safeParse(newItem);
+
+    if (validItem.success) {
+      await axios.post("http://localhost:8080/applications", validItem.data, {
+        headers: {
+          Authorization: `Bearer ${resolvedToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+    }
+  } catch (e) {
+    toast("Failed to create new application!");
+  }
+}
+
 async function updateApplication(
   token: string,
   id?: string,
@@ -58,4 +78,4 @@ async function updateApplication(
   }
 }
 
-export { getApplications, updateApplication };
+export { getApplications, updateApplication, createApplication };

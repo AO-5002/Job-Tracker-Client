@@ -3,13 +3,13 @@ import ApplicationList from "./ApplicationList";
 import { useRef, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { updateApplication } from "@/utility/api/ApplicationAPI";
 import {
   type Application,
   type ApplicationUpdate,
   type StatusEnumType,
 } from "@/utility/schema/Application";
+import AddApplication from "../CRUDButtons/AddApplication";
 
 interface DataProps {
   name: StatusEnumType; // match enum values
@@ -42,9 +42,6 @@ export default function Column({ name }: DataProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["applications"] });
-    },
-    onError: () => {
-      toast("Failure to update!");
     },
   });
 
@@ -79,7 +76,10 @@ export default function Column({ name }: DataProps) {
       ref={columnRef}
       className={`bg-zinc-800 text-white h-full p-4 shadow-lg rounded-lg flex flex-col items-center gap-4`}
     >
-      <h1 className="text-lg font-light border-b self-start w-full">{name}</h1>
+      <span className="flex flex-row justify-between w-full border-b items-center py-2">
+        <h1 className="text-lg font-light  w-full">{name}</h1>
+        <AddApplication />
+      </span>
       <ApplicationList status={name} />
     </div>
   );
