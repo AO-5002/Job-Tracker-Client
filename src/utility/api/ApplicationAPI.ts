@@ -3,7 +3,7 @@ import type { SortField, SortOrder } from "../stores/ApplicationStore";
 import {
   ApplicationSchema,
   updateApplicationSchema,
-  type Application,
+  type ApplicationCreate,
   type ApplicationUpdate,
   type Status,
 } from "../schema/Application";
@@ -34,7 +34,7 @@ async function getApplications(
   }
 }
 
-async function createApplication(token: string, newItem: Application) {
+async function createApplication(token: string, newItem: ApplicationCreate) {
   try {
     const resolvedToken = await token;
     const validItem = ApplicationSchema.safeParse(newItem);
@@ -46,6 +46,8 @@ async function createApplication(token: string, newItem: Application) {
           "Content-Type": "application/json",
         },
       });
+
+      toast("Application was successfully created!");
     }
   } catch (e) {
     toast("Failed to create new application!");

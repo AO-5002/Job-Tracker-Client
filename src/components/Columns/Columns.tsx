@@ -1,8 +1,14 @@
 import ColumnLayout from "@/layouts/ColumnLayout";
 import Column from "./Column";
+import type { StatusEnumType } from "@/utility/schema/Application";
 
 export default function Columns() {
-  const columnData = [
+  type ColumnDataType = {
+    id: number;
+    name: StatusEnumType;
+  };
+
+  const columnData: ColumnDataType[] = [
     {
       id: 1,
       name: "SAVED",

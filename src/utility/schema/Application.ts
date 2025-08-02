@@ -17,8 +17,18 @@ export const ApplicationSchema = z.object({
   location: z.string(),
   status: StatusEnum,
   job_post_url: z.string(),
-  resume_url: z.string(),
-  cover_letter_url: z.string(),
+  resume_url: z.instanceof(File).optional(),
+  cover_letter_url: z.instanceof(File).optional(),
+});
+
+export const createApplicationSchema = z.object({
+  job_title: z.string(),
+  company_name: z.string(),
+  location: z.string().optional(),
+  status: StatusEnum.optional(),
+  job_post_url: z.string(),
+  resume_url: z.instanceof(File).optional(),
+  cover_letter_url: z.instanceof(File).optional(),
 });
 
 export const updateApplicationSchema = z.object({
@@ -27,10 +37,11 @@ export const updateApplicationSchema = z.object({
   location: z.string().optional(),
   status: StatusEnum.optional(),
   job_post_url: z.string().optional(),
-  resume_url: z.string().optional(),
-  cover_letter_url: z.string().optional(),
+  resume_url: z.instanceof(File).optional(),
+  cover_letter_url: z.instanceof(File).optional(),
 });
 
 export type Application = z.infer<typeof ApplicationSchema>;
 export type Status = z.infer<typeof StatusEnum>;
 export type ApplicationUpdate = z.infer<typeof updateApplicationSchema>;
+export type ApplicationCreate = z.infer<typeof createApplicationSchema>;
