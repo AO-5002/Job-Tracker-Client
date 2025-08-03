@@ -1,6 +1,8 @@
 import ColumnLayout from "@/layouts/ColumnLayout";
 import Column from "./Column";
 import type { StatusEnumType } from "@/utility/schema/Application";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 export default function Columns() {
   type ColumnDataType = {
@@ -30,6 +32,19 @@ export default function Columns() {
       name: "REJECTED",
     },
   ];
+
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      if (isAuthenticated) {
+        const token = await getAccessTokenSilently();
+        console.log("JWT Token:", token);
+      }
+    };
+
+    fetchToken();
+  }, [getAccessTokenSilently, isAuthenticated]);
 
   return (
     <ColumnLayout classname="grid gap-4 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">

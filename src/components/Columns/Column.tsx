@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { updateApplication } from "@/utility/api/ApplicationAPI";
+import { useState } from "react";
 import {
   type Application,
   type ApplicationUpdate,
@@ -17,6 +18,7 @@ interface DataProps {
 }
 
 export default function Column({ name }: DataProps) {
+  const [dataCount, setDataCount] = useState(0);
   const { getAccessTokenSilently } = useAuth0();
   const queryClient = useQueryClient();
 
@@ -77,10 +79,13 @@ export default function Column({ name }: DataProps) {
       className={`bg-zinc-800 text-white h-full p-4 shadow-lg rounded-lg flex flex-col items-center gap-4`}
     >
       <span className="flex flex-row justify-between w-full border-b items-center py-2">
-        <h1 className="text-lg font-light w-full">{name}</h1>
+        <span className="flex flex-row items-center gap-2">
+          <h1 className="text-lg font-light w-full">{name}</h1>
+          <span className="text-xs font-bold text-zinc-400">({dataCount})</span>
+        </span>
         <AddApplication status={name} />
       </span>
-      <ApplicationList status={name} />
+      <ApplicationList status={name} setDataCount={setDataCount} />
     </div>
   );
 }

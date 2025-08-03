@@ -31,11 +31,6 @@ interface StatusApplication {
 export default function AddApplication({ status }: StatusApplication) {
   const { getAccessTokenSilently } = useAuth0();
   const queryClient = useQueryClient();
-
-  const displayStatus = () => {
-    console.log(status, typeof status);
-  };
-
   const {
     register,
     handleSubmit,
@@ -173,11 +168,7 @@ export default function AddApplication({ status }: StatusApplication) {
             </div>
           </div>
           <SheetFooter className="">
-            {/* <Button type="submit">Save changes</Button> */}
-            <button type="submit" className="hover:cursor-pointer">
-              Save changes
-            </button>
-            <button onClick={displayStatus}>Display status for column</button>
+            <Button type="submit">Save changes</Button>
             <SheetClose asChild>
               <Button variant="outline">Close</Button>
             </SheetClose>
