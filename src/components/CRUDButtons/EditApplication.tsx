@@ -11,12 +11,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Application } from "@/utility/schema/Application";
 
 interface ChildrenProps {
   children: React.ReactNode;
+  data: Application;
 }
 
-export function EditApplication({ children }: ChildrenProps) {
+export function EditApplication({ children, data }: ChildrenProps) {
   return (
     <Dialog>
       <form>
@@ -25,7 +27,7 @@ export function EditApplication({ children }: ChildrenProps) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
+            <DialogTitle>Edit Application</DialogTitle>
             <DialogDescription>
               Make changes to your application here. Click save when you&apos;re
               done.
@@ -33,12 +35,28 @@ export function EditApplication({ children }: ChildrenProps) {
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
+              <Label htmlFor="job_title">Job Title</Label>
+              <Input id="job_title" defaultValue={data.job_title} />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" name="username" defaultValue="@peduarte" />
+              <Label htmlFor="company_name">Company Name</Label>
+              <Input id="job_title" defaultValue={data.company_name} />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="job_post_url">Job Post URL</Label>
+              <Input id="job_post_url" defaultValue={data.job_post_url} />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="location">Location</Label>
+              <Input id="location" defaultValue={data.location} />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="resume_url">Resume File</Label>
+              <Input id="resume_url" type="file" />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="cover_letter_url">Cover Letter File</Label>
+              <Input id="cover_letter_url" type="file" />
             </div>
           </div>
           <DialogFooter>

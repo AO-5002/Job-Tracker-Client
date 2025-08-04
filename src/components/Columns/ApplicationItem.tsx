@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import { Eye } from "lucide-react";
 import { FilePenLine } from "lucide-react";
 import { EditApplication } from "../CRUDButtons/EditApplication";
+import { Button } from "../ui/button";
 
 export default function ApplicationItem(item: Application) {
   const ref = useRef(null);
@@ -91,24 +92,24 @@ export default function ApplicationItem(item: Application) {
         }`}
       >
         <div className="w-full h-full flex flex-row items-start justify-around gap-4 text-xs text-zinc-400 font-bold">
-          <EditApplication>
+          <EditApplication data={item}>
             <span className="flex flex-row gap-1 items-center hover:cursor-pointer">
               <FilePenLine height={12} width={12} />
               <p> Edit</p>
             </span>
           </EditApplication>
-          <EditApplication>
+          <Button variant="outline">
             <span className="flex flex-row gap-1 items-center hover:cursor-pointer">
               <Eye height={12} width={12} />
               <p> Resume</p>
             </span>
-          </EditApplication>
-          <EditApplication>
+          </Button>
+          <Button variant="outline">
             <span className="flex flex-row gap-1 items-center hover:cursor-pointer">
               <Eye height={12} width={12} />
               <p> Cover Letter</p>
             </span>
-          </EditApplication>
+          </Button>
         </div>
         <div className="w-full flex flex-col items-start gap-1 text-xs text-zinc-400 ">
           <p>
