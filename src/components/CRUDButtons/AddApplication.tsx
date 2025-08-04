@@ -78,7 +78,7 @@ export default function AddApplication({ status }: StatusApplication) {
         <SheetHeader>
           <SheetTitle>Add an application</SheetTitle>
           <SheetDescription>
-            Fill in the details of your application. This can always be edited
+            Fill in the details of your application. This can always be changed
             later!
           </SheetDescription>
         </SheetHeader>

@@ -19,6 +19,8 @@ export const ApplicationSchema = z.object({
   job_post_url: z.string(),
   resume_url: z.instanceof(File).optional(),
   cover_letter_url: z.instanceof(File).optional(),
+  application_date: z.string(),
+  updated_at: z.string(),
 });
 
 export const createApplicationSchema = z.object({
