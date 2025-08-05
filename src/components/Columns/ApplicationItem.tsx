@@ -5,16 +5,19 @@ import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 import { GripVertical } from "lucide-react";
 import { createPortal } from "react-dom";
-import { Eye } from "lucide-react";
 import { FilePenLine } from "lucide-react";
 import { EditApplication } from "../CRUDButtons/EditApplication";
-import { Button } from "../ui/button";
+import { ViewResume, NoResume } from "../CRUDButtons/ViewResume";
+import { ViewCoverLetter, NoCoverLetter } from "../CRUDButtons/ViewCoverLetter";
 
 export default function ApplicationItem(item: Application) {
   const ref = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [preview, setPreview] = useState<HTMLElement | null>(null);
+
+  // Add timeout ref for hover delay
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const element = ref.current;
@@ -23,7 +26,19 @@ export default function ApplicationItem(item: Application) {
       return;
     }
 
-    return draggable({
+    // Global drag start listener to collapse this item when ANY drag starts
+    const handleGlobalDragStart = () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = null;
+      }
+      setIsHovered(false);
+    };
+
+    // Listen for global drag events
+    document.addEventListener("dragstart", handleGlobalDragStart);
+
+    const cleanup = draggable({
       element,
       getInitialData: () => ({
         type: "application",
@@ -34,6 +49,12 @@ export default function ApplicationItem(item: Application) {
 
       onDragStart() {
         setIsDragging(() => true);
+        // Clear any pending hover expansion when dragging starts
+        if (hoverTimeoutRef.current) {
+          clearTimeout(hoverTimeoutRef.current);
+          hoverTimeoutRef.current = null;
+        }
+        setIsHovered(false);
       },
 
       onDrop() {
@@ -50,17 +71,53 @@ export default function ApplicationItem(item: Application) {
         });
       },
     });
+
+    return () => {
+      cleanup();
+      document.removeEventListener("dragstart", handleGlobalDragStart);
+    };
   }, [item]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleMouseEnter = () => {
+    // Don't expand if currently dragging
+    if (isDragging) return;
+
+    // Set a delay before expanding (500ms)
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHovered(true);
+    }, 500);
+  };
+
+  const handleMouseLeave = () => {
+    // Clear the timeout if mouse leaves before delay completes
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setIsHovered(false);
+  };
 
   return (
     <div
       className={`w-full bg-white text-black rounded-md p-4 flex flex-col items-center gap-2 transition-all duration-300 ease-in-out ${
         isDragging ? "opacity-50" : ""
       } ${isDragging ? "cursor-grabbing" : ""}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
-        height: isHovered ? "180px" : "72px", // Expand from 80px to 120px
+        height: isHovered ? "180px" : "72px",
+        pointerEvents: isDragging ? "none" : "auto", // Disable pointer events when dragging
+        position: "relative",
+        zIndex: isHovered ? 10 : 1, // Higher z-index when expanded
       }}
     >
       {preview && createPortal(<ApplicationPreview item={item} />, preview)}
@@ -98,18 +155,8 @@ export default function ApplicationItem(item: Application) {
               <p> Edit</p>
             </span>
           </EditApplication>
-          <Button variant="outline">
-            <span className="flex flex-row gap-1 items-center hover:cursor-pointer">
-              <Eye height={12} width={12} />
-              <p> Resume</p>
-            </span>
-          </Button>
-          <Button variant="outline">
-            <span className="flex flex-row gap-1 items-center hover:cursor-pointer">
-              <Eye height={12} width={12} />
-              <p> Cover Letter</p>
-            </span>
-          </Button>
+          {item.resume_url ? <ViewResume /> : <NoResume />}
+          {item.resume_url ? <ViewCoverLetter /> : <NoCoverLetter />}
         </div>
         <div className="w-full flex flex-col items-start gap-1 text-xs text-zinc-400 ">
           <p>

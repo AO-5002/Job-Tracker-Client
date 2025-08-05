@@ -23,12 +23,17 @@ export const ApplicationSchema = z.object({
   updated_at: z.string(),
 });
 
+const optionalString = z
+  .string()
+  .transform((val) => (val === "" ? undefined : val))
+  .optional();
+
 export const createApplicationSchema = z.object({
-  job_title: z.string(),
-  company_name: z.string(),
-  location: z.string().optional(),
+  job_title: z.string().min(1, "Job title is required"),
+  company_name: z.string().min(1, "Company name is required"),
+  location: optionalString,
   status: StatusEnum.optional(),
-  job_post_url: z.string(),
+  job_post_url: z.string().min(1, "Job post URL is required"),
   resume_url: z.instanceof(File).optional(),
   cover_letter_url: z.instanceof(File).optional(),
 });

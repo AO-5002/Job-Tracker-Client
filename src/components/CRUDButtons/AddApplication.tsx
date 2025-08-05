@@ -55,6 +55,7 @@ export default function AddApplication({ status }: StatusApplication) {
   const handleCreate = (data: ApplicationCreate) => {
     const addedStatusData: ApplicationCreate = {
       ...data,
+      location: data.location === undefined ? "" : data.location,
       status: status as StatusEnumType,
     };
     console.log("Form submitted successfully with data:", addedStatusData);
